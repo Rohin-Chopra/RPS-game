@@ -30,7 +30,7 @@ class MusicPlayerMain < Gosu::Window
         @score_font = Gosu::Font.new(30)
         
         @player = Player.new('Rohin','None', 0, true)
-        @computer = Player.new('Shaun', 'None', 0, false)
+        @computer = Player.new('Computer', 'None', 0, false)
         @curr_turn = 'player'
    
     end   
@@ -207,5 +207,6 @@ class MusicPlayerMain < Gosu::Window
         @info_font.draw("mouse_y: #{mouse_y}", 350, 550, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
     end    
 end    
-
-MusicPlayerMain.new.show 
+if __FILE__ == $0
+    MusicPlayerMain.new.show 
+end
