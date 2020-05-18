@@ -56,8 +56,8 @@ class MusicPlayerMain < Gosu::Window
     end 
     
     def draw_choice
-        @score_font.draw('You Choose : '  + @player.choice, 70 , 500, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
-        @score_font.draw('Computer Choose :  ' + @computer.choice, 490 , 500, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
+        @score_font.draw('You Choose : ', 70 , 500, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
+        @score_font.draw('Computer Choose :  ' , 490 , 500, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
 
     end   
 
@@ -128,9 +128,14 @@ class MusicPlayerMain < Gosu::Window
         rock = Gosu::Image.new('images/rock_sm.png')
         paper = Gosu::Image.new('images/paper_sm.png')
         scissors = Gosu::Image.new('images/scissors_sm.png')
-        rock.draw(50, 110 , ZOrder::UI)
-        paper.draw(360 , 120, ZOrder::UI)
-        scissors.draw(650,120, ZOrder::UI)
+        if @player.choice != 'None'  
+            player_choice = @player.choice.downcase 
+            eval(player_choice).draw(245, 500 , ZOrder::UI)
+        end
+        if @computer.choice != 'None'    
+            comp_choice = @computer.choice.downcase 
+            eval(comp_choice).draw(740, 500 , ZOrder::UI)
+        end
     end    
 
     def start_check()
@@ -197,6 +202,7 @@ class MusicPlayerMain < Gosu::Window
         draw_score_labels()
         draw_choice()
         draw_turn()
+        display_img_choice()
         @info_font.draw("mouse_x: #{mouse_x}", 200, 550, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
         @info_font.draw("mouse_y: #{mouse_y}", 350, 550, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
     end    
