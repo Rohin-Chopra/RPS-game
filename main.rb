@@ -4,6 +4,7 @@ require 'gosu'
 WIDTH = 1000
 HEIGHT = 600
 
+
 class Player
     attr_accessor :name, :choice, :score, :is_turn
     def initialize(name, choice , score, is_turn)                                        
@@ -19,7 +20,7 @@ module ZOrder
     BACKGROUND, MIDDLE, UI = *0..2
 end
 
-class MusicPlayerMain < Gosu::Window
+class RPSMain < Gosu::Window
 
     def initialize
         super WIDTH, HEIGHT
@@ -32,7 +33,8 @@ class MusicPlayerMain < Gosu::Window
         @player = Player.new('Rohin','None', 0, true)
         @computer = Player.new('Computer', 'None', 0, false)
         @curr_turn = 'player'
-   
+
+  
     end   
 
     def draw_images
@@ -208,5 +210,5 @@ class MusicPlayerMain < Gosu::Window
     end    
 end    
 if __FILE__ == $0
-    MusicPlayerMain.new.show 
+    RPSMain.new.show 
 end
