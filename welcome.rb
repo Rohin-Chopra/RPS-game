@@ -6,7 +6,7 @@ module ZOrder
     BACKGROUND, MIDDLE, UI = *0..2
 end
 
-
+require_relative './main.rb'
 
 class TextField < Gosu::TextInput
     # Some constants that define our appearance.
@@ -137,7 +137,8 @@ class WelcomeScreen < Gosu::Window
         if((x1 > 413 and x2 < 528) and (y1 > 444 and y2 < 494))
             @player1_name =  @text_fields[0].text
             @player2_name =  @text_fields[1].text
-            puts returns_player()
+            returns_player()
+            RPSMain.new.show     
         end 
     end
 
@@ -161,13 +162,21 @@ class WelcomeScreen < Gosu::Window
         button_img = Gosu::Image.new('images/button.png')
         button_img.draw(410,440,ZOrder::UI)
     end    
+
     def returns_player()
-      if @player2_name != 'Enter Name'
-        return @player1_name, @player2_name
-      else
-        return @player1_name
+      myarr = Array.new()
+      if @player1_name == 'Enter Name'
+        @player1_name = 'Unknown'
       end  
-    end  
+      if @player2_name == 'Enter Name'
+        @player2_name = 'Unknown'
+      end
+      my_file = File.new('file.txt', 'w')
+      my_file.write(@player_num_choice.to_s+ "\n")
+      my_file.write(@player1_name +"\n")
+      my_file.write(@player2_name +"\n")
+      my_file.close
+    end   
 
     def draw_background
         Gosu.draw_rect(0, 0, WIDTH, HEIGHT, @background , ZOrder::BACKGROUND, mode = :default)

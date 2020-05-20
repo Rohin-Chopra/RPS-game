@@ -29,12 +29,18 @@ class RPSMain < Gosu::Window
         @general_font = Gosu::Font.new(self, Gosu::default_font_name, 40)
         @info_font = Gosu::Font.new(20)
         @score_font = Gosu::Font.new(30)
-        
-        @player = Player.new('Rohin','None', 0, true)
-        @computer = Player.new('Computer', 'None', 0, false)
+        file = File.new('file.txt', 'r')
+        num_of_players = file.gets.chomp()
+        puts num_of_players
+        player1_name = file.gets.chomp()
+        if num_of_players.to_i == 2
+           player2_name = file.gets.chomp()
+        else
+            player2_name = 'Computer'
+        end    
+        @player = Player.new(player1_name,'None', 0, true)
+        @computer = Player.new(player2_name, 'None', 0, false)
         @curr_turn = 'player'
-
-  
     end   
 
     def draw_images
@@ -194,7 +200,7 @@ class RPSMain < Gosu::Window
         end
     end
     def update
-
+        
     end
   
     def draw()
