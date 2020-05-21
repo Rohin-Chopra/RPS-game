@@ -31,7 +31,6 @@ class RPSMain < Gosu::Window
         @score_font = Gosu::Font.new(30)
         file = File.new('file.txt', 'r')
         num_of_players = file.gets.chomp()
-        puts num_of_players
         player1_name = file.gets.chomp()
         if num_of_players.to_i == 2
            player2_name = file.gets.chomp()
@@ -41,6 +40,7 @@ class RPSMain < Gosu::Window
         @player = Player.new(player1_name,'None', 0, true)
         @computer = Player.new(player2_name, 'None', 0, false)
         @curr_turn = 'player'
+        @game_finished = false
     end   
 
     def draw_images
@@ -132,6 +132,7 @@ class RPSMain < Gosu::Window
         rand_num = rand(3)
         return choice_arr[rand_num]
     end   
+
     def display_img_choice
         rock = Gosu::Image.new('images/rock_sm.png')
         paper = Gosu::Image.new('images/paper_sm.png')
@@ -149,8 +150,6 @@ class RPSMain < Gosu::Window
     def start_check()
             if(@player.choice != 'None' && @computer.choice != 'None')
                 check_winner()
-            else
-                puts('Waiting for calculation')    
             end         
     end
 
@@ -160,19 +159,18 @@ class RPSMain < Gosu::Window
             'Paper'=> ['Rock'],
             'Scissors'=>['Paper']
         } 
-    end    
+    end
+
     def check_winner()
-        if rule_engine[@player.choice].include? @computer.choice
-            @player.score += 1
-            puts(@computer.choice)
-        elsif rule_engine[@computer.choice].include? @player.choice
-            @computer.score += 1
-            puts(@computer.choice)
-        else
-            puts ('Tie')
-        end    
-  
+        unless @game_finished    
+            if rule_engine[@player.choice].include? @computer.choice
+                @player.score += 1
+            elsif rule_engine[@computer.choice].include? @player.choice
+                @computer.score += 1
+            end    
+        end
     end  
+
     def draw_turn
         x1 = 35
         x2 = 55
@@ -189,6 +187,10 @@ class RPSMain < Gosu::Window
         end    
         turn_img.draw_as_quad(x1, y1, Gosu::Color::WHITE, x2, y1, Gosu::Color::WHITE, x1, y2, Gosu::Color::WHITE, x2, y2, Gosu::Color::WHITE,ZOrder::UI)
     end    
+
+    def display_winner()
+        @score_font.draw(@winner_name + ' Won!' , 385 , 500, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
+    end    
     def needs_cursor?
         true
     end
@@ -200,7 +202,13 @@ class RPSMain < Gosu::Window
         end
     end
     def update
-        
+        if @player.score == 3 
+            @game_finished = true
+            @winner_name = @player.name
+        elsif @computer.score == 3
+            @game_finished = true
+            @winner_name = @computer.name
+        end    
     end
   
     def draw()
@@ -208,9 +216,14 @@ class RPSMain < Gosu::Window
         draw_images()
         draw_rps_labels()
         draw_score_labels()
-        draw_choice()
-        draw_turn()
-        display_img_choice()
+        unless @game_finished 
+            draw_choice()
+            draw_turn()
+            display_img_choice()
+        end
+        if @game_finished
+            display_winner()
+        end    
         @info_font.draw("mouse_x: #{mouse_x}", 200, 550, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
         @info_font.draw("mouse_y: #{mouse_y}", 350, 550, ZOrder::UI, 1.0, 1.0, Gosu::Color::WHITE)
     end    
